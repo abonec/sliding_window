@@ -27,6 +27,11 @@ func (w *Window) Reserve() bool {
 }
 
 func (w *Window) IsAvailable() bool {
+	w.clean()
+	return w.checkAvailable()
+}
+
+func (w *Window) checkAvailable() bool {
 	if w.begin == w.nextWrite && w.full {
 		return false
 	}
@@ -35,7 +40,7 @@ func (w *Window) IsAvailable() bool {
 
 // простая реализация circular buffer
 func (w *Window) circularPut() bool {
-	if !w.IsAvailable() {
+	if !w.checkAvailable() {
 		return false
 	}
 	// записываем TS в конец
