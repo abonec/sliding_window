@@ -2,6 +2,16 @@ package sliding
 
 import (
 	"time"
+
+	"github.com/pkg/errors"
+)
+
+const (
+	requestLimit = 100
+)
+
+var (
+	ErrRequestLimit = errors.New("request limit is too high")
 )
 
 type Window struct {
@@ -13,11 +23,14 @@ type Window struct {
 	currentWrite int
 }
 
-func NewWindow(size int) *Window {
+func NewWindow(size int) (*Window, error) {
+	if size > requestLimit {
+		return nil, errors.Wrapf(ErrRequestLimit, "max request limit: %d", requestLimit)
+	}
 	return &Window{
 		size:       size,
 		timeStamps: make([]int64, size),
-	}
+	}, nil
 }
 
 // резервируем слот, возвращает false если слотов нет
