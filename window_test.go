@@ -8,7 +8,8 @@ import (
 
 func TestCircular(t *testing.T) {
 	size := 10
-	w := NewWindow(size)
+	w, err := NewWindow(size)
+	require.NoError(t, err)
 	for i := 0; i < 10; i++ {
 		require.True(t, w.circularPut())
 	}
@@ -26,7 +27,8 @@ func TestWindow_Put(t *testing.T) {
 		return duration
 	}
 	size := 4
-	w := NewWindow(size)
+	w, err := NewWindow(size)
+	require.NoError(t, err)
 	// 4 запроса сразу разрешаем
 	require.True(t, putN(w, 4))
 	// пятый уже фейлится
